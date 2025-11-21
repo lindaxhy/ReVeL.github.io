@@ -321,35 +321,18 @@ However, we find that the options may leak exploitable signals, which makes the 
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Fragility of MCQA</h2>
-        <h3 class="subtitle is-4 has-text-left mt-5">1. Adding options to open-ended questions</h3>
+        <h3 class="subtitle is-4 has-text-left mt-5">1. Options can <em>create</em> knowledge</h3>
         <div class="content has-text-justified is-medium">
           <p>
-            Across both open-weight and proprietary models, converting to MCQA consistently yields substantial improvements relative to the open-ended baseline and the random-guessing upper bound. This indicates that when a model correctly answers a multiple-choice question, it is often utilizing the information embedded in the option set even when it does not actually have the required knowledge or reasoning skills.
+            Converting open-ended questions into MCQA results in significant accuracy gains. Models exploit cues and positional patterns, rather than retrieving or reasoing from actual knowledge. When options are removed or replaced by “None-of-the-Above”, performance collapses, and models often reason correctly but still choose the wrong option, exposing logical inconsistency.
           </p>
           <img src="static/images/Add_options.jpg" alt="add option results" style="max-height: 400px; display: block; margin-left: auto; margin-right: auto;" />
           <p class="subtitle is-6 mt-3 has-text-centered">Performance comparison on original open-ended datasets (SimpleQA, Visual SimpleQA) and their multiple-choice versions (*-Choice, with 6 options). The Random Guess score is a theoretical upper bound that combines the model’s actual open-ended accuracy with the probability of correctly guessing on the rest of the questions from six options.</p>
         </div>
-<h3 class="subtitle is-4 has-text-left mt-5">2. Replacing GT with None-of-the-Above</h3>
+<h3 class="subtitle is-4 has-text-left mt-5">2. RFT on MCQA hurts open-ended QA</h3>
         <div class="content has-text-justified is-medium">
           <p>
-            When the correct option is replaced by NOTA, models
-frequently display a logical inconsistency: the chain-of-thought reasoning process sometimes correctly eliminates the incorrect options yet still selects one of them as the final answer. Such contradictions occur even when the model explicitly reasons towards the correct concept but finalizes with an inconsistent choice. Quantitatively, mismatch rates
-rise from 18% in standard MCQA to 50% under NOTA. Also, we notice that models often reuse the original “correct” letter position even after the content was modified (after shifting) henceforth incorrect.
-          </p>
-        </div>
-
-        <h3 class="subtitle is-4 has-text-left mt-5">3. Omitting the options from an MCQ</h3>
-        <div class="content has-text-justified is-medium">
-          <p>
-            We remove the options for some multiple-choice questions, treating them as open-form questions. We found that models achieve consistently lower accuracy than the original MCQA format.
-          </p>
-          <img src="static/images/MCQ_NOTA.jpg" alt="RFT on MCQA results" style="max-height: 400px;" />
-        </div>
-
-<h3 class="subtitle is-4 has-text-left mt-5">4. RFT on MCQA hurts open-ended QA</h3>
-        <div class="content has-text-justified is-medium">
-          <p>
-            RFT on MCQA improves MCQA scores but degrades open-ended performance, thereby widening the MCQA–OpenQA gap. The verifiable reward under MCQA may overfit to option-specific heuristics rather than transferable reasoning. Across settings, MCQA enables option exploitation that inflates accuracy, amplifies shortcuts tied to options during training.
+            Reinforcement fine-tuning (RFT) on MCQA improves MC accuracy but harms open-ended QA, widening the MCQA–OpenQA gap.
           </p>
 
           <div class="has-text-centered my-5">
